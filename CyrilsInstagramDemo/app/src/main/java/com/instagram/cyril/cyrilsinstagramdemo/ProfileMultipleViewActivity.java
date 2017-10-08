@@ -123,12 +123,14 @@ public class ProfileMultipleViewActivity extends AppCompatActivity {
         logUserOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                popMenuDown();
                 logUserOut();
             }
         });
         scrollViewUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                popMenuDown();
                 profile.smoothScrollTo(0, 0);
             }
         });

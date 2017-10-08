@@ -27,11 +27,14 @@ public class CustomPageAdapter extends PagerAdapter {
     private ArrayList<String> urlList;
     private LayoutInflater layoutInflater;
     private Drawable bmp;
+    private int originalWidth,originalHeight;
 
-    public CustomPageAdapter(Context context, ArrayList<String> urlList, Drawable bmp) {
+    public CustomPageAdapter(Context context, ArrayList<String> urlList, Drawable bmp,int width,int height) {
         this.context = context;
         this.urlList = urlList;
         this.bmp = bmp;
+        this.originalWidth=width;
+        this.originalHeight=height;
     }
 
     @Override
@@ -52,20 +55,16 @@ public class CustomPageAdapter extends PagerAdapter {
             customView = layoutInflater.inflate(R.layout.swipe_image_view, container, false);
             ImageView postedImage = (ImageView) customView.findViewById(R.id.postImage);
             TextView imagePosition = (TextView) customView.findViewById(R.id.imagePosition);
-            if (bmp != null) {
+            if (bmp != null)
                 postedImage.setImageDrawable(bmp);
-                /*
-                int height = postedImage.getLayoutParams().height;
-                int width = postedImage.getLayoutParams().width;
                 UserSession session = new UserSession(context);
-                height = Math.round(Integer.parseInt(session.getUsableWidth()) * height / width);
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) postedImage.getLayoutParams();
-                params.height=height;
-                params.topMargin=0;
+                int image_Height = Math.round(Integer.parseInt(session.getUsableWidth()) * originalHeight / originalWidth);
+                ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) postedImage.getLayoutParams();
+                params.height=image_Height;
+                //params.topMargin=0;
                 params.width=Integer.parseInt(session.getUsableWidth());
                 postedImage.setLayoutParams(params);
-                */
-                  }
+                postedImage.setScaleType(ImageView.ScaleType.FIT_XY);
             new DownloadImageTask(false, postedImage)
                     .execute(urlList.get(position));
             imagePosition.setText(position + 1 + "/" + urlList.size());

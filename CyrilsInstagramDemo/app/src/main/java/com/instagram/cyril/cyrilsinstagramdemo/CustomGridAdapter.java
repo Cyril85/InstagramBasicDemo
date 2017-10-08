@@ -48,131 +48,144 @@ public class CustomGridAdapter extends BaseAdapter {
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
         View customView = null;
-        LayoutInflater cyrilsInflater = LayoutInflater.from(context);
-        customView = cyrilsInflater.inflate(R.layout.grid_image_view, null);
-        final ImageView thumbnail = (ImageView) customView.findViewById(R.id.gridImage);
-        ImageView videoSymbol = (ImageView) customView.findViewById(R.id.videoSymbol);
-        RelativeLayout stackGroup = (RelativeLayout) customView.findViewById(R.id.layerGroup);
-        TextView stackCount = (TextView) customView.findViewById(R.id.layerCount);
-        new DownloadImageTask(false, thumbnail)
-                .execute(list.get(i).thumbnailURL);
-        if (list.get(i).postType.equals("video")) {
+        try {
 
-            videoSymbol.setVisibility(View.VISIBLE);
-        } else if (list.get(i).postType.equals("carousel")) {
-            stackGroup.setVisibility(View.VISIBLE);
-            stackCount.setText(Integer.toString(list.get(i).carousel_mediaUrlList.size()));
-        }
-        customView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Dialog dialog = new Dialog(context, R.style.AppTheme);
-                dialog.setContentView(R.layout.individual_post_view);
-                dialog.setCanceledOnTouchOutside(false);
-                UserSession session = new UserSession(context);
-                RelativeLayout backButton = (RelativeLayout) dialog.findViewById(R.id.imageButton_Back);
-                int viewpagerheight = Math.round(Integer.parseInt(session.getUsableWidth()) * list.get(i).imageheight / list.get(i).imageWidth);
-                LinearLayout profileDetailsTab = (LinearLayout) dialog.findViewById(R.id.profileDetailsTab);
-                profileDetailsTab.measure(0, 0);
-                ImageView profilePic = (ImageView) dialog.findViewById(R.id.profilePic);
-                ViewPager postedImagePager = (ViewPager) dialog.findViewById(R.id.postImagePager);
-                postedImagePager.getLayoutParams().height = viewpagerheight + profileDetailsTab.getMeasuredHeight();
-                postedImagePager.getLayoutParams().width = Integer.parseInt(session.getUsableWidth());
-                TextView captionText = (TextView) dialog.findViewById(R.id.captionText);
-                if (list.get(i).postType.equals("image")) {
-                    ArrayList<String> urlList = new ArrayList<>();
-                    urlList.add(list.get(i).standardResolutionPostURL);
-                    CustomPageAdapter adapter = new CustomPageAdapter(context, urlList, thumbnail.getDrawable());
-                    postedImagePager.setAdapter(adapter);
-                } else if (list.get(i).postType.equals("carousel")) {
-                    CustomPageAdapter adapter = new CustomPageAdapter(context, list.get(i).carousel_mediaUrlList, thumbnail.getDrawable());
-                    postedImagePager.setAdapter(adapter);
-                } else {
-                    postedImagePager.setVisibility(View.GONE);
-                    final VideoView videoPlayer = (VideoView) dialog.findViewById(R.id.videoPlayer);
-                    videoPlayer.setVisibility(View.VISIBLE);
-                    videoPlayer.getLayoutParams().height = viewpagerheight;
-                    final ImageView volumeButton = (ImageView) dialog.findViewById(R.id.volumeButton);
-                    volumeButton.setVisibility(View.VISIBLE);
-                    videoPlayer.setVideoURI(Uri.parse(list.get(i).videoURL));
-                    videoPlayer.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View view, MotionEvent motionEvent) {
-                            if (muteStatus) {
-                                player.setVolume(1, 1);
-                                muteStatus = false;
-                                volumeButton.setImageResource(R.mipmap.symbol_unmute);
-                            } else {
-                                player.setVolume(0, 0);
-                                muteStatus = true;
-                                volumeButton.setImageResource(R.mipmap.symbol_muted);
-                            }
-                            return false;
-                        }
-                    });
-                    videoPlayer.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-                        @Override
-                        public void onScrollChanged() {
-                            if (player != null) {
-                                player.setVolume(0, 0);
-                                muteStatus = true;
-                                volumeButton.setImageResource(R.mipmap.symbol_muted);
-                            }
-                        }
-                    });
-                    videoPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                        @Override
-                        public void onPrepared(MediaPlayer m) {
-                            player = m;
-                            try {
-                                if (m.isPlaying()) {
-                                    m.stop();
-                                    m.release();
-                                    m = new MediaPlayer();
-                                }
-                                m.setVolume(0f, 0f);
-                                volumeButton.setImageResource(R.mipmap.symbol_muted);
-                                m.setLooping(true);
-                                m.start();
-                            } catch (Exception e) {
-                                Log.e("EXX", "Exception caught from onpreparedlistedner   video player  " + e.getLocalizedMessage());
-                            }
-                        }
-                    });
+            LayoutInflater cyrilsInflater = LayoutInflater.from(context);
+            customView = cyrilsInflater.inflate(R.layout.grid_image_view, null);
+            final ImageView thumbnail = (ImageView) customView.findViewById(R.id.gridImage);
+            ImageView videoSymbol = (ImageView) customView.findViewById(R.id.videoSymbol);
+            RelativeLayout stackGroup = (RelativeLayout) customView.findViewById(R.id.layerGroup);
+            TextView stackCount = (TextView) customView.findViewById(R.id.layerCount);
+            new DownloadImageTask(false, thumbnail)
+                    .execute(list.get(i).thumbnailURL);
+            if (list.get(i).postType.equals("video")) {
 
-                }
-                new DownloadImageTask(true, profilePic)
-                        .execute(list.get(i).userProfilePicURL);
-
-                TextView profoileName = (TextView) dialog.findViewById(R.id.profileName);
-                ImageView likeButton = (ImageView) dialog.findViewById(R.id.likeButton);
-                TextView likeText = (TextView) dialog.findViewById(R.id.likeCount);
-                ImageView commentButton = (ImageView) dialog.findViewById(R.id.commentButton);
-                TextView commentText = (TextView) dialog.findViewById(R.id.commentCount);
-                TextView tagsText = (TextView) dialog.findViewById(R.id.tagsText);
-
-                profoileName.setText(list.get(i).userName);
-                likeText.setText(list.get(i).likesCount + " Likes");
-                commentText.setText(list.get(i).commentsCount + " Comments");
-                captionText.setText(list.get(i).captionText);
-                String tagText = "Tags   ";
-                for (int j = 0; j < list.get(i).tagList.size(); j++) {
-                    tagText += " #" + list.get(i).tagList.get(j);
-                }
-                tagsText.setText(tagText);
-                if (list.get(i).userLikedStatus)
-                    likeButton.setImageResource(R.mipmap.button_liked);
-                backButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-
-                dialog.show();
+                videoSymbol.setVisibility(View.VISIBLE);
+            } else if (list.get(i).postType.equals("carousel")) {
+                stackGroup.setVisibility(View.VISIBLE);
+                stackCount.setText(Integer.toString(list.get(i).carousel_mediaUrlList.size()));
             }
-        });
+            customView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Dialog dialog = new Dialog(context, R.style.AppTheme);
+                    dialog.setContentView(R.layout.individual_post_view);
+                    dialog.setCanceledOnTouchOutside(false);
+                    UserSession session = new UserSession(context);
+                    RelativeLayout backButton = (RelativeLayout) dialog.findViewById(R.id.imageButton_Back);
+                    int viewpagerheight = Math.round(Integer.parseInt(session.getUsableWidth()) * list.get(i).imageheight / list.get(i).imageWidth);
+                    LinearLayout profileDetailsTab = (LinearLayout) dialog.findViewById(R.id.profileDetailsTab);
+                    profileDetailsTab.measure(0, 0);
+                    ImageView profilePic = (ImageView) dialog.findViewById(R.id.profilePic);
+                    ViewPager postedImagePager = (ViewPager) dialog.findViewById(R.id.postImagePager);
+                    postedImagePager.getLayoutParams().height = viewpagerheight + profileDetailsTab.getMeasuredHeight();
+                    postedImagePager.getLayoutParams().width = Integer.parseInt(session.getUsableWidth());
+                    TextView captionText = (TextView) dialog.findViewById(R.id.captionText);
+                    if (list.get(i).postType.equals("image")) {
+                        ArrayList<String> urlList = new ArrayList<>();
+                        urlList.add(list.get(i).standardResolutionPostURL);
+                        CustomPageAdapter adapter = new CustomPageAdapter(context, urlList, thumbnail.getDrawable(), list.get(i).imageWidth, list.get(i).imageheight);
+                        postedImagePager.setAdapter(adapter);
+                    } else if (list.get(i).postType.equals("carousel")) {
+                        CustomPageAdapter adapter = new CustomPageAdapter(context, list.get(i).carousel_mediaUrlList, thumbnail.getDrawable(), list.get(i).imageWidth, list.get(i).imageheight);
+                        postedImagePager.setAdapter(adapter);
+                    } else {
+                        postedImagePager.setVisibility(View.GONE);
+                        final VideoView videoPlayer = (VideoView) dialog.findViewById(R.id.videoPlayer);
+                        videoPlayer.setVisibility(View.VISIBLE);
+                        videoPlayer.getLayoutParams().height = viewpagerheight;
+                        final ImageView volumeButton = (ImageView) dialog.findViewById(R.id.volumeButton);
+                        volumeButton.setVisibility(View.VISIBLE);
+                        videoPlayer.setVideoURI(Uri.parse(list.get(i).videoURL));
 
+                        videoPlayer.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View view, MotionEvent motionEvent) {
+                                try {
+                                    if (muteStatus && player != null) {
+                                        player.setVolume(1, 1);
+                                        muteStatus = false;
+                                        volumeButton.setImageResource(R.mipmap.symbol_unmute);
+                                    } else {
+                                        player.setVolume(0, 0);
+                                        muteStatus = true;
+                                        volumeButton.setImageResource(R.mipmap.symbol_muted);
+                                    }
+                                } catch (Exception e) {
+                                    Log.e("EXC", "Exception caught from onTouchlistener_videoplayer CustomGridAdapter  " + e.getLocalizedMessage());
+                                }
+                                return false;
+                            }
+                        });
+                        videoPlayer.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+                            @Override
+                            public void onScrollChanged() {
+                                try {
+                                    if (player != null) {
+                                        player.setVolume(0, 0);
+                                        muteStatus = true;
+                                        volumeButton.setImageResource(R.mipmap.symbol_muted);
+                                    }
+                                } catch (Exception e) {
+                                    Log.e("EXC", "Exception caught from onScrollchangedListener_videoplayer CustomGridAdapter  " + e.getLocalizedMessage());
+                                }
+                            }
+                        });
+                        videoPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            @Override
+                            public void onPrepared(MediaPlayer m) {
+                                player = m;
+                                try {
+                                    if (m.isPlaying()) {
+                                        m.stop();
+                                        m.release();
+                                        m = new MediaPlayer();
+                                    }
+                                    m.setVolume(0f, 0f);
+                                    volumeButton.setImageResource(R.mipmap.symbol_muted);
+                                    m.setLooping(true);
+                                    m.start();
+                                } catch (Exception e) {
+                                    Log.e("EXX", "Exception caught from onpreparedlistedner   video player  " + e.getLocalizedMessage());
+                                }
+                            }
+                        });
+
+                    }
+                    new DownloadImageTask(true, profilePic)
+                            .execute(list.get(i).userProfilePicURL);
+
+                    TextView profoileName = (TextView) dialog.findViewById(R.id.profileName);
+                    ImageView likeButton = (ImageView) dialog.findViewById(R.id.likeButton);
+                    TextView likeText = (TextView) dialog.findViewById(R.id.likeCount);
+                    ImageView commentButton = (ImageView) dialog.findViewById(R.id.commentButton);
+                    TextView commentText = (TextView) dialog.findViewById(R.id.commentCount);
+                    TextView tagsText = (TextView) dialog.findViewById(R.id.tagsText);
+
+                    profoileName.setText(list.get(i).userName);
+                    likeText.setText(list.get(i).likesCount + " Likes");
+                    commentText.setText(list.get(i).commentsCount + " Comments");
+                    captionText.setText(list.get(i).captionText);
+                    String tagText = "Tags   ";
+                    for (int j = 0; j < list.get(i).tagList.size(); j++) {
+                        tagText += " #" + list.get(i).tagList.get(j);
+                    }
+                    tagsText.setText(tagText);
+                    if (list.get(i).userLikedStatus)
+                        likeButton.setImageResource(R.mipmap.button_liked);
+                    backButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.show();
+                }
+            });
+        } catch (Exception e) {
+            Log.e("EXC", "Exception caught from getView CustomGridAdapter  " + e.getLocalizedMessage());
+        }
         return customView;
     }
 
