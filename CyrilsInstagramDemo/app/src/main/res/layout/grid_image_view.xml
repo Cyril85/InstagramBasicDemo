@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/gridImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:src="@mipmap/photo_icon"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:id="@+id/videoSymbol"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignRight="@+id/gridImage"
+        android:layout_alignTop="@+id/gridImage"
+        android:padding="15dp"
+        android:visibility="gone"
+        android:src="@mipmap/symbol_video"/>
+    <RelativeLayout
+        android:id="@+id/layerGroup"
+        android:layout_width="50dp"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:layout_height="50dp"
+        android:layout_alignRight="@+id/gridImage"
+        android:layout_alignTop="@+id/gridImage">
+
+    <ImageView
+        android:id="@+id/layerSymbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/symbol_stack"/>
+    <TextView
+        android:id="@+id/layerCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="10dp"
+        android:paddingTop="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+</RelativeLayout>
