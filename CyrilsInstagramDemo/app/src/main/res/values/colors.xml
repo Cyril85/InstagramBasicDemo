@@ -5,5 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorOrenge">#FCA604</color>
     <color name="grey">#ccccff</color>
+    <color name="colorLightBlue">#0076FF</color>
     <color name="listViewBackgroundColor">#5c3f9b</color>
 </resources>

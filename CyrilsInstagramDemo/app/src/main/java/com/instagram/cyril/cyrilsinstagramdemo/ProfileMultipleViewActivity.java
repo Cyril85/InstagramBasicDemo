@@ -428,4 +428,9 @@ public class ProfileMultipleViewActivity extends AppCompatActivity {
             return false;
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        new GracefullApplicationClosure(ProfileMultipleViewActivity.this);
+    }
 }

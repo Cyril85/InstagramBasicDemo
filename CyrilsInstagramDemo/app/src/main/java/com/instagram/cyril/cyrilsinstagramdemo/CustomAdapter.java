@@ -80,12 +80,12 @@ public class CustomAdapter extends ArrayAdapter<PostData> {
                     postedImagePager.getLayoutParams().height = viewpagerheight + 30;
                     ArrayList<String> urlList = new ArrayList<>();
                     urlList.add(postDatas.get(position).standardResolutionPostURL);
-                    CustomPageAdapter adapter = new CustomPageAdapter(getContext(), urlList, null,postDatas.get(position).imageWidth,postDatas.get(position).imageheight);
+                    CustomPageAdapter adapter = new CustomPageAdapter(getContext(), urlList, null, postDatas.get(position).imageWidth, postDatas.get(position).imageheight);
                     postedImagePager.setAdapter(adapter);
                 } else if (postDatas.get(position).postType.equals("carousel")) {
 
                     postedImagePager.getLayoutParams().height = viewpagerheight + 30;
-                    CustomPageAdapter adapter = new CustomPageAdapter(getContext(), postDatas.get(position).carousel_mediaUrlList, null,postDatas.get(position).imageWidth,postDatas.get(position).imageheight);
+                    CustomPageAdapter adapter = new CustomPageAdapter(getContext(), postDatas.get(position).carousel_mediaUrlList, null, postDatas.get(position).imageWidth, postDatas.get(position).imageheight);
                     postedImagePager.setAdapter(adapter);
                 } else {
                     viewpagerheight = Math.round((Integer.parseInt(session.getUsableWidth())) * postDatas.get(position).imageheight / postDatas.get(position).imageWidth);
@@ -104,31 +104,35 @@ public class CustomAdapter extends ArrayAdapter<PostData> {
                     videoPlayer.setVideoURI(Uri.parse(postDatas.get(position).videoURL));
                     videoPlayer.setOnTouchListener(new View.OnTouchListener() {
                         @Override
-                        public boolean onTouch(View view, MotionEvent motionEvent) {try{
-                            if (muteStatus) {
-                                player.setVolume(1, 1);
-                                muteStatus = false;
-                                volumeButton.setImageResource(R.mipmap.symbol_unmute);
-                            } else {
-                                player.setVolume(0, 0);
-                                muteStatus = true;
-                                volumeButton.setImageResource(R.mipmap.symbol_muted);
-                            }} catch (Exception e) {
-                            Log.e("EXX", "Exception caught from onTouchListener_video player CustomAdapter  " + e.getLocalizedMessage());
-                        }
+                        public boolean onTouch(View view, MotionEvent motionEvent) {
+                            try {
+                                if (muteStatus) {
+                                    player.setVolume(1, 1);
+                                    muteStatus = false;
+                                    volumeButton.setImageResource(R.mipmap.symbol_unmute);
+                                } else {
+                                    player.setVolume(0, 0);
+                                    muteStatus = true;
+                                    volumeButton.setImageResource(R.mipmap.symbol_muted);
+                                }
+                            } catch (Exception e) {
+                                Log.e("EXX", "Exception caught from onTouchListener_video player CustomAdapter  " + e.getLocalizedMessage());
+                            }
                             return false;
                         }
                     });
                     videoPlayer.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
                         @Override
-                        public void onScrollChanged() {try{
-                            if (player != null) {
-                                player.setVolume(0, 0);
-                                muteStatus = true;
-                                volumeButton.setImageResource(R.mipmap.symbol_muted);
-                            }} catch (Exception e) {
-                            Log.e("EXX", "Exception caught from onScrollchangedListener_video player CustomAdapter  " + e.getLocalizedMessage());
-                        }
+                        public void onScrollChanged() {
+                            try {
+                                if (player != null) {
+                                    player.setVolume(0, 0);
+                                    muteStatus = true;
+                                    volumeButton.setImageResource(R.mipmap.symbol_muted);
+                                }
+                            } catch (Exception e) {
+                                Log.e("EXX", "Exception caught from onScrollchangedListener_video player CustomAdapter  " + e.getLocalizedMessage());
+                            }
                         }
                     });
                     videoPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
