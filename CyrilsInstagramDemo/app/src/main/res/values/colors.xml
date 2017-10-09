@@ -6,5 +6,7 @@
     <color name="colorOrenge">#FCA604</color>
     <color name="grey">#ccccff</color>
     <color name="colorLightBlue">#0076FF</color>
+    <color name="colorRed">#D21511</color>
+    <color name="colorLightGreen">#7AF658</color>
     <color name="listViewBackgroundColor">#5c3f9b</color>
 </resources>

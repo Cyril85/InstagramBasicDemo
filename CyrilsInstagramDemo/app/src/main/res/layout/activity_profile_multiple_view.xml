@@ -191,6 +191,7 @@
         android:layout_width="40dp"
         android:elevation="10dp"
         android:layout_height="40dp"
+        android:clickable="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
@@ -206,12 +207,97 @@
             android:textSize="17dp"
             android:textColor="@android:color/white"/>
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/scrollButton"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:clickable="true"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:visibility="gone"
+        android:elevation="20dp"
+        android:layout_above="@+id/logoutButton"
+        android:background="@drawable/circle_blue"
+        android:layout_marginBottom="20dp">
+        <ImageView
+            android:id="@+id/scrollButtonIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/scroll_up"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/refreshButton"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:elevation="20dp"
+        android:layout_above="@+id/scrollButton"
+        android:background="@drawable/circle_green"
+        android:visibility="gone"
+        android:layout_marginBottom="20dp">
+        <ImageView
+            android:id="@+id/refreshButtonButtonIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/refresh"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/logButton"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="85dp"
+        android:layout_above="@+id/logoutButton"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:elevation="20dp"
+        android:layout_alignBaseline="@+id/scrollButton"
+        android:background="@drawable/circle_red"
+        android:visibility="gone"
+        android:layout_marginBottom="20dp">
+        <ImageView
+            android:padding="7dp"
+            android:id="@+id/logoutButtonIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/log_out"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/gridButton"
+        android:clickable="true"
+        android:layout_marginRight="85dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:elevation="20dp"
+        android:layout_above="@+id/logButton"
+        android:background="@drawable/circle_grey"
+        android:visibility="gone"
+        android:layout_marginBottom="20dp">
+        <ImageView
+            android:id="@+id/gridButtonIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/grid_white"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
 
     <ImageView
         android:layout_marginRight="15dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/scrollButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:elevation="20dp"
@@ -223,7 +309,6 @@
         android:layout_marginRight="15dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/logButton"
         android:elevation="20dp"
         android:visibility="gone"
         android:layout_above="@+id/logoutButton"

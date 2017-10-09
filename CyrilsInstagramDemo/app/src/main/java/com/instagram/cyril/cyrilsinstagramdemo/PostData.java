@@ -82,4 +82,5 @@ public class PostData {
         this.imageWidth = width;
         this.imageheight = height;
     }
+
 }
